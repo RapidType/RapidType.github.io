@@ -1,69 +1,127 @@
-body {
-    font-family: Arial, sans-serif; /* Set the font family for the body */
-    background-color: #f4f4f4; /* Set the background color */
-    color: #333; /* Set the text color */
-    margin: 0; /* Remove default margin */
-    padding: 0; /* Remove default padding */
-    display: flex; /* Use flexbox layout */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
-    height: 100vh; /* Set the height to full viewport height */
-    font-weight: bold; /* Set font weight to bold */
-}
-
-.container {
-    text-align: center; /* Center text */
-    background: #fff; /* Set background color to white */
-    padding: 20px; /* Add padding */
-    border-radius: 10px; /* Round the corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
-    width: 80%; /* Set the width to 80% */
-    max-width: 600px; /* Set the maximum width */
-}
-
-.input-container {
-    position: relative;
-    width: 100%;
-    height: 100px; /* Match the height of the textarea */
-    overflow: hidden; /* Hide overflowing content */
-}
-
-#text-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 16px;
-    color: gray;
-    white-space: pre-wrap; /* Preserve spaces and line breaks */
-    word-wrap: break-word; /* Wrap text properly at the box width */
-    z-index: 1;
-    pointer-events: none; /* Prevent interaction */
-    padding: 10px; /* Match the textarea padding */
-    box-sizing: border-box;
-    overflow: hidden; /* Prevent scrolling issues */
-    text-align: left;
-}
-
-textarea {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+/* General Reset */
+body, html {
     margin: 0;
-    padding: 10px;
-    font-size: 16px;
-    font-family: 'Courier New', Courier, monospace;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: none;
-    outline: none;
-    background: transparent; /* Make the background transparent */
-    z-index: 2;
-    color: transparent; /* Hide user input */
-    caret-color: black; /* Keep caret visible */
+    padding: 0;
     box-sizing: border-box;
-}
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f3f4f6;
+  }
+  
+  .test-container {
+    text-align: center;
+    background: #fff;
+    padding: 20px;
+    width: 800px;
+    height: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  h1 {
+    font-size: 2em;
+    color: #333;
+  }
+  
+  .stats {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.2em;
+  }
+  
+  .typing-area {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+  }
+  
+  #text-display {
+    font-size: 1.5em;
+    color: #444;
+    text-align: left;
+    width: 100%; /* Stretch full width */
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  #text-input {
+    margin-top: 10px;
+    width: 100%; /* Stretch full width */
+    padding: 10px;
+    font-size: 1.2em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Popup Card */
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    z-index: 10;
+    width: 400px;
+  }
+  
+  .popup.hidden {
+    display: none;
+  }
+  
+  .popup h2 {
+    margin-bottom: 15px;
+  }
+  
+  .popup ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .popup ul li {
+    margin: 10px 0;
+  }
+  
+  .go-home-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .go-home-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  #restart-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  #restart-btn:hover {
+    background-color: #218838;
+  }
+  

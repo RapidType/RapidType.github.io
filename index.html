@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>RapidType - Typing Speed Test</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div class="container">
-            <h1>TypeRush - Typing Speed Test</h1>
-            <div class="input-container">
-                <div id="text-overlay"></div>
-                <textarea id="input-area" placeholder="Start typing here..." spellcheck="false"></textarea>
-            </div>
-            <div class="stats">
-                <p>Time: <span id="time">60</span> seconds</p>
-                <p>WPM: <span id="wpm">0</span></p>
-                <p>Accuracy: <span id="accuracy">100</span>%</p>
-            </div>
-            <button id="start-btn">Start Test</button>
-        </div>
-        <script src="script.js"></script>
-    </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RapidType - Typing Speed Test</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to RapidType</h1>
+    <p>Select a difficulty level to start the test:</p>
+    <div class="difficulty-buttons">
+      <button onclick="startGame('easy')">Easy</button>
+      <button onclick="startGame('medium')">Medium</button>
+      <button onclick="startGame('hard')">Hard</button>
+    </div>
+  </div>
+  <script>
+    function startGame(level) {
+      window.location.href = `test.html?difficulty=${level}`;
+    }
+  </script>
+</body>
 </html>

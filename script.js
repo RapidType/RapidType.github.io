@@ -1,134 +1,149 @@
-const sampleTexts = [
-    "The rapid advancement of technology has revolutionized every aspect of human life. From artificial intelligence to renewable energy, the innovations of today pave the way for a sustainable future. Yet, with great progress comes the responsibility to use technology wisely and ethically.",
-    "The ancient Egyptians built pyramids that have stood the test of time, their secrets buried beneath layers of history. These marvels of engineering remind us of the ingenuity and perseverance of humankind, inspiring future generations to dream and achieve the impossible.",
-    "Every day is a chance to rewrite your story. The power to change lies within you, waiting to be unleashed. Believe in yourself, set ambitious goals, and take deliberate actions toward achieving them. Success is not a destination but a journey of continuous improvement."
-];
+const urlParams = new URLSearchParams(window.location.search);
+const difficulty = urlParams.get('difficulty') || 'easy'; // Default to 'easy' if no difficulty is specified
 
-const inputArea = document.getElementById("input-area");
-const textOverlay = document.getElementById("text-overlay");
-const timeDisplay = document.getElementById("time");
-const wpmDisplay = document.getElementById("wpm");
-const accuracyDisplay = document.getElementById("accuracy");
-const startButton = document.getElementById("start-btn");
-
-let isStarted = false;
+// Word pool variable
+let words = [];
+let currentWordIndex = 0;
+let typedCharacters = 0;
+let mistakes = 0;
 let timeLeft = 60;
-let timer;
-let correctChars = 0;
-let totalChars = 0;
+let interval;
 
-let referenceText = ""; // The full reference text
-let currentLineStart = 0; // Tracks the start index of the visible portion
+// DOM Elements
+const textDisplay = document.getElementById('text-display');
+const textInput = document.getElementById('text-input');
+const wpmDisplay = document.getElementById('wpm');
+const cpmDisplay = document.getElementById('cpm');
+const accuracyDisplay = document.getElementById('accuracy');
+const timerDisplay = document.getElementById('timer');
+const popup = document.getElementById('popup');
+const popupWpm = document.getElementById('popup-wpm');
+const popupCpm = document.getElementById('popup-cpm');
+const popupAccuracy = document.getElementById('popup-accuracy');
+const restartBtn = document.getElementById('restart-btn');
+const goHomeBtn = document.getElementById('go-home-btn');
+const goHomePopupBtn = document.getElementById('go-home-popup-btn');
+
+// Show the homepage when the Go Home button is clicked
+function goHome() {
+  window.location.href = '/'; // Adjust URL if necessary
+}
+
+// Load words from the selected difficulty
+function loadWords() {
+  fetch(`${difficulty}.json`)
+    .then(response => response.json())
+    .then(data => {
+      words = data.words;
+      startTest();
+    })
+    .catch(error => {
+      console.error("Error loading word file:", error);
+    });
+}
+
+// Generate random words dynamically
+function generateWords(count) {
+  const wordList = [];
+  for (let i = 0; i < count; i++) {
+    wordList.push(words[Math.floor(Math.random() * words.length)]);
+  }
+  return wordList;
+}
+
+function updateTextDisplay() {
+  const maxWidth = textDisplay.clientWidth; // Available space for words
+  let visibleWords = '';
+  let currentWidth = 0;
+
+  for (let i = currentWordIndex; i < words.length; i++) {
+    const wordWidth = words[i].length * 15; // Approximate width per word
+    if (currentWidth + wordWidth < maxWidth) {
+      visibleWords += words[i] + ' ';
+      currentWidth += wordWidth;
+    } else {
+      break;
+    }
+  }
+  textDisplay.textContent = visibleWords.trim();
+}
 
 function startTest() {
-    if (isStarted) return;
-
-    isStarted = true;
-    timeLeft = 60;
-    correctChars = 0;
-    totalChars = 0;
-
-    inputArea.value = "";
-    inputArea.disabled = false;
-    inputArea.focus();
-
-    // Display a random text
-    referenceText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
-    currentLineStart = 0; // Reset to the beginning
-    renderVisibleText(); // Render the first portion of the text
-
-    timer = setInterval(updateTime, 1000);
+  updateTextDisplay();
+  textInput.addEventListener('input', checkInput);
+  interval = setInterval(updateTimer, 1000);
 }
 
-function updateTime() {
-    timeLeft--;
-    timeDisplay.textContent = timeLeft;
+function checkInput(e) {
+  const typedText = textInput.value.trim(); // Get the typed input
+  const currentWord = words[currentWordIndex]; // Current word to match
 
-    if (timeLeft <= 0) {
-        clearInterval(timer);
-        endTest();
+  // Handle backspace and input logic
+  if (e.inputType === 'deleteContentBackward') {
+    return; // Do not count backspace as a mistake or character typed
+  }
+
+  // Track all characters typed
+  typedCharacters++;
+
+  // Validate input
+  if (currentWord.startsWith(typedText)) {
+    textInput.style.color = "green";
+  } else {
+    textInput.style.color = "red";
+    mistakes++;
+  }
+
+  // Move to the next word when space is pressed and the word is correct
+  if (typedText === currentWord && textInput.value.endsWith(" ")) {
+    currentWordIndex++;
+    textInput.value = ""; // Clear the input field
+    if (currentWordIndex >= words.length) {
+      words = [...words, ...generateWords(20)]; // Generate more words if the current pool is exhausted
     }
+    updateTextDisplay(); // Update visible words
+  }
+
+  updateStats();
 }
 
-function endTest() {
-    isStarted = false;
-    inputArea.disabled = true;
+function updateStats() {
+  const wordsTyped = currentWordIndex;
+  const minutes = (60 - timeLeft) / 60;
+  const wpm = Math.round(wordsTyped / minutes || 0);
+  const cpm = Math.round(typedCharacters / minutes || 0);
+  const accuracy = Math.max(0, Math.round(((typedCharacters - mistakes) / typedCharacters) * 100) || 0);
 
-    const wordsTyped = correctChars / 5;
-    const wpm = Math.round((wordsTyped / (60 - timeLeft)) * 60);
-    const accuracy = Math.round((correctChars / totalChars) * 100) || 0;
-
-    wpmDisplay.textContent = wpm;
-    accuracyDisplay.textContent = accuracy;
+  wpmDisplay.textContent = wpm;
+  cpmDisplay.textContent = cpm;
+  accuracyDisplay.textContent = `${accuracy}%`;
 }
 
-function checkInput() {
-    const typedText = inputArea.value;
-    correctChars = 0;
-    totalChars = typedText.length;
+function updateTimer() {
+  timeLeft--;
+  timerDisplay.textContent = timeLeft;
 
-    // Check correctness of input
-    for (let i = currentLineStart; i < currentLineStart + typedText.length; i++) {
-        if (referenceText[i] === typedText[i - currentLineStart]) {
-            correctChars++;
-        }
-    }
-
-    // Dynamically check if the text reaches the end of the line
-    if (isEndOfLine(typedText)) {
-        currentLineStart += typedText.length; // Move the visible window forward
-        inputArea.value = ""; // Clear the input box
-    }
-
-    renderVisibleText(); // Update the visible text
-    updateAccuracy();
+  if (timeLeft === 0) {
+    clearInterval(interval);
+    textInput.disabled = true;
+    showPopup();
+  }
 }
 
-function renderVisibleText() {
-    // Extract the visible portion of the text
-    const visibleText = referenceText.substring(currentLineStart); // Show text starting from the current line
-    let styledHTML = "";
-
-    for (let i = 0; i < visibleText.length; i++) {
-        if (i < inputArea.value.length) {
-            // Characters already typed
-            if (inputArea.value[i] === visibleText[i]) {
-                styledHTML += `<span style="color: black;">${visibleText[i]}</span>`;
-            } else {
-                styledHTML += `<span style="color: red;">${visibleText[i]}</span>`;
-            }
-        } else {
-            // Remaining characters
-            styledHTML += `<span style="color: gray;">${visibleText[i]}</span>`;
-        }
-    }
-
-    textOverlay.innerHTML = styledHTML;
+function showPopup() {
+  popupWpm.textContent = wpmDisplay.textContent;
+  popupCpm.textContent = cpmDisplay.textContent;
+  popupAccuracy.textContent = accuracyDisplay.textContent;
+  popup.classList.remove('hidden');
 }
 
-function isEndOfLine(typedText) {
-    // Create a temporary span to measure the width of the typed text
-    const tempSpan = document.createElement("span");
-    tempSpan.style.position = "absolute";
-    tempSpan.style.visibility = "hidden";
-    tempSpan.style.whiteSpace = "pre";
-    tempSpan.style.fontFamily = window.getComputedStyle(inputArea).fontFamily;
-    tempSpan.style.fontSize = window.getComputedStyle(inputArea).fontSize;
-    tempSpan.textContent = typedText;
+restartBtn.addEventListener('click', () => {
+  location.reload(); // Reload the page to restart the test
+});
 
-    document.body.appendChild(tempSpan);
-    const textWidth = tempSpan.offsetWidth; // Get the width of the rendered text
-    document.body.removeChild(tempSpan);
+// Add event listener to the "Go Home" buttons
+goHomeBtn.addEventListener('click', goHome);
+goHomePopupBtn.addEventListener('click', goHome);
 
-    const inputWidth = inputArea.clientWidth - parseFloat(window.getComputedStyle(inputArea).paddingLeft) - parseFloat(window.getComputedStyle(inputArea).paddingRight);
-
-    return textWidth >= inputWidth; // Check if the text width exceeds the input box width
-}
-
-function updateAccuracy() {
-    const accuracy = Math.round((correctChars / totalChars) * 100) || 0;
-    accuracyDisplay.textContent = accuracy;
-}
-
-startButton.addEventListener("click", startTest);
-inputArea.addEventListener("input", checkInput);
+// Start the test when the page loads and the difficulty is loaded
+loadWords();

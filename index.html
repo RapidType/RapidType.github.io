@@ -4,16 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RapidType - Typing Speed Test</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="index_style.css">
 </head>
 <body>
   <div class="container">
     <h1>Welcome to RapidType</h1>
     <p>Select a difficulty level to start the test:</p>
     <div class="difficulty-buttons">
-      <button onclick="startGame('easy')">Easy</button>
-      <button onclick="startGame('medium')">Medium</button>
-      <button onclick="startGame('hard')">Hard</button>
+      <button class="easy" onclick="startGame('easy')"><span>Easy</span></button>
+      <button class="medium" onclick="startGame('medium')"><span>Medium</span></button>
+      <button class="hard" onclick="startGame('hard')"><span>Hard</span></button>
     </div>
   </div>
   <script>

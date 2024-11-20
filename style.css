@@ -56,3 +56,15 @@ button:hover {
     justify-content: space-between;
     margin: 10px 0;
 }
+
+#styled-text-container {
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    background: #f9f9f9;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    white-space: pre-wrap; /* Preserve line breaks and spaces */
+    text-align: left;
+}

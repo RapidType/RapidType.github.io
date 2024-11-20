@@ -17,6 +17,10 @@ const sampleText = ["The quick brown fox jumps over the lazy dog.",
     "Practice makes perfect, so keep typing!",
     "A journey of a thousand miles begins with a single step."];
 
+const styledTextContainer = document.createElement("div");
+styledTextContainer.id = "styled-text-container";
+inputArea.before(styledTextContainer);
+
 
 function startTest () {
     if(isStarted)   return;
@@ -35,6 +39,7 @@ function startTest () {
     // Display a random text
     const randomText = sampleText[Math.floor(Math.random() * sampleText.length)];
     displayText.textContent = randomText;
+    renderStyledText(randomText, "");
 
     timer = setInterval(updateTime, 1000);
 }
@@ -77,7 +82,26 @@ function checkInput() {
     }
 
     // Update accuracy in real time
-    accuracyDisplay.textContent = Math.round((correctChars / totalChars) * 100) || 0;
+    renderStyledText(referenceText, typedText);
+}
+
+function renderStyledText(referenceText, typedText) {
+    let styledHTML = "";
+
+    for (let i = 0; i < referenceText.length; i++) {
+        const char = referenceText[i];
+        if (i < typedText.length) {
+            if (typedText[i] === char) {
+                styledHTML += `<span style="color: black;">${char}</span>`;
+            } else {
+                styledHTML += `<span style="color: red;">${char}</span>`;
+            }
+        } else {
+            styledHTML += `<span style="color: gray;">${char}</span>`;
+        }
+    }
+
+    styledTextContainer.innerHTML = styledHTML;
 }
 
 startButton.addEventListener("click", startTest);

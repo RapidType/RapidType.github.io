@@ -8,12 +8,14 @@
     </head>
     <body>
         <div class="container">
-            <h1>Test your typing speed.</h1>
-            <p id="display-text">Click "Start Test" to begin.</p>
-            <textarea id="input-area" placeholder="Start typing here..." disabled></textarea>
+            <h1>TypeRush - Typing Speed Test</h1>
+            <div class="input-container">
+                <div id="text-overlay"></div>
+                <textarea id="input-area" placeholder="Start typing here..." spellcheck="false"></textarea>
+            </div>
             <div class="stats">
                 <p>Time: <span id="time">60</span> seconds</p>
-                <p>Wpm: <span id="wpm">0</span></p>
+                <p>WPM: <span id="wpm">0</span></p>
                 <p>Accuracy: <span id="accuracy">100</span>%</p>
             </div>
             <button id="start-btn">Start Test</button>

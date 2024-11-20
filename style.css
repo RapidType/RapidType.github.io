@@ -1,70 +1,68 @@
 body {
-    font: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    font-family: Arial, sans-serif; /* Set the font family for the body */
+    background-color: #f4f4f4; /* Set the background color */
+    color: #333; /* Set the text color */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
+    display: flex; /* Use flexbox layout */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    height: 100vh; /* Set the height to full viewport height */
+    font-weight: bold; /* Set font weight to bold */
 }
 
 .container {
-    text-align: center;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 600px;
+    text-align: center; /* Center text */
+    background: #fff; /* Set background color to white */
+    padding: 20px; /* Add padding */
+    border-radius: 10px; /* Round the corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    width: 80%; /* Set the width to 80% */
+    max-width: 600px; /* Set the maximum width */
+}
+
+.input-container {
+    position: relative; /* Set position to relative */
+    width: 100%; /* Set width to 100% */
+    height: 100px; /* Match the height of the textarea */
+}
+
+#text-overlay {
+    position: absolute; /* Set position to absolute */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    width: 100%; /* Set width to 100% */
+    height: 100%; /* Set height to 100% */
+    font-family: 'Courier New', Courier, monospace; /* Monospace ensures equal spacing */
+    font-size: 16px; /* Set font size */
+    color: gray; /* Set text color to gray */
+    white-space: pre-wrap; /* Preserve spaces and line breaks */
+    word-wrap: break-word; /* Wrap text properly at the box width */
+    z-index: 1; /* Set z-index to 1 */
+    pointer-events: none; /* Prevent interaction */
+    padding: 10px; /* Match the textarea padding */
+    box-sizing: border-box; /* Include padding in the element's width */
+    overflow: hidden; /* Prevent overflow */
+    text-align: left; /* Align text to the left */
 }
 
 textarea {
-    width: 100%;
-    height: 100px;
-    margin: 10px 0;
-    font-size: 16px;
-    padding: 10px 0 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: none;
-    outline: none;
-}
-
-textarea:disabled {
-    background: #f9f9f9;
-}
-
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-.stats {
-    display: flex;
-    justify-content: space-between;
-    margin: 10px 0;
-}
-
-#styled-text-container {
-    font-size: 16px;
-    font-family: 'Courier New', Courier, monospace;
-    background: #f9f9f9;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 10px;
-    white-space: pre-wrap; /* Preserve line breaks and spaces */
-    text-align: left;
+    position: absolute; /* Set position to absolute */
+    top: 0; /* Align to the top */
+    left: 0; /* Align to the left */
+    width: 100%; /* Set width to 100% */
+    height: 100%; /* Set height to 100% */
+    margin: 0; /* Remove default margin */
+    padding: 10px; /* Match the padding of the overlay */
+    font-size: 16px; /* Set font size */
+    font-family: 'Courier New', Courier, monospace; /* Use the same monospace font */
+    border: 1px solid #ccc; /* Set border style */
+    border-radius: 5px; /* Round the corners */
+    resize: none; /* Prevent resizing */
+    outline: none; /* Remove outline */
+    background: transparent; /* Make the background transparent */
+    z-index: 2; /* Set z-index to 2 */
+    color: transparent; /* Hide user input */
+    caret-color: black; /* Keep the caret visible */
+    box-sizing: border-box; /* Ensure padding fits within the container */
 }

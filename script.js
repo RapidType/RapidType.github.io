@@ -1,35 +1,30 @@
-let timeLeft = 60;
-let timer;
-let isStarted = false;
-let wpm = 0;
-let accuracy = 100;
-let correctChars = 0;
-let totalChars = 0;
+const sampleTexts = [
+    "The quick brown fox jumps over the lazy dog.",
+    "Practice makes perfect, so keep typing!",
+    "A journey of a thousand miles begins with a single step."
+];
 
-const displayText = document.getElementById("display-text");
 const inputArea = document.getElementById("input-area");
+const textOverlay = document.getElementById("text-overlay");
 const timeDisplay = document.getElementById("time");
 const wpmDisplay = document.getElementById("wpm");
 const accuracyDisplay = document.getElementById("accuracy");
 const startButton = document.getElementById("start-btn");
 
-const sampleText = ["The quick brown fox jumps over the lazy dog.",
-    "Practice makes perfect, so keep typing!",
-    "A journey of a thousand miles begins with a single step."];
+let isStarted = false;
+let timeLeft = 60;
+let timer;
+let correctChars = 0;
+let totalChars = 0;
 
-const styledTextContainer = document.createElement("div");
-styledTextContainer.id = "styled-text-container";
-inputArea.before(styledTextContainer);
+let referenceText = "";
 
-
-function startTest () {
-    if(isStarted)   return;
+function startTest() {
+    if (isStarted) return;
 
     isStarted = true;
     timeLeft = 60;
     correctChars = 0;
-    wpm = 0;
-    accuracy = 100;
     totalChars = 0;
 
     inputArea.value = "";
@@ -37,71 +32,59 @@ function startTest () {
     inputArea.focus();
 
     // Display a random text
-    const randomText = sampleText[Math.floor(Math.random() * sampleText.length)];
-    displayText.textContent = randomText;
-    renderStyledText(randomText, "");
+    referenceText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
+    textOverlay.textContent = referenceText;
 
     timer = setInterval(updateTime, 1000);
 }
 
-function updateTime () {
+function updateTime() {
     timeLeft--;
     timeDisplay.textContent = timeLeft;
 
-    if(timeLeft <= 0) {
+    if (timeLeft <= 0) {
         clearInterval(timer);
         endTest();
     }
 }
 
-function endTest () {
+function endTest() {
     isStarted = false;
     inputArea.disabled = true;
 
-    // Calculate WPM and accuracy
     const wordsTyped = correctChars / 5;
-    wpm = Math.round((wordsTyped / (60 - timeLeft)) * 60);
-    accuracy = Math.round((correctChars / totalChars) * 100);
+    const wpm = Math.round((wordsTyped / (60 - timeLeft)) * 60);
+    const accuracy = Math.round((correctChars / totalChars) * 100) || 0;
 
-    // Display results
     wpmDisplay.textContent = wpm;
-    accuracyDisplay.textContent = accuracy || 0;
+    accuracyDisplay.textContent = accuracy;
 }
 
 function checkInput() {
     const typedText = inputArea.value;
-    const referenceText = displayText.textContent;
-
     correctChars = 0;
     totalChars = typedText.length;
 
-    for (let i = 0; i < typedText.length; i++) {
-        if (typedText[i] === referenceText[i]) {
-            correctChars++;
-        }
-    }
-
-    // Update accuracy in real time
-    renderStyledText(referenceText, typedText);
-}
-
-function renderStyledText(referenceText, typedText) {
-    let styledHTML = "";
+    let overlayHTML = "";
 
     for (let i = 0; i < referenceText.length; i++) {
-        const char = referenceText[i];
         if (i < typedText.length) {
-            if (typedText[i] === char) {
-                styledHTML += `<span style="color: black;">${char}</span>`;
+            if (typedText[i] === referenceText[i]) {
+                overlayHTML += `<span style="color: black;">${referenceText[i]}</span>`;
+                correctChars++;
             } else {
-                styledHTML += `<span style="color: red;">${char}</span>`;
+                overlayHTML += `<span style="color: red;">${referenceText[i]}</span>`;
             }
         } else {
-            styledHTML += `<span style="color: gray;">${char}</span>`;
+            overlayHTML += `<span style="color: gray;">${referenceText[i]}</span>`;
         }
     }
 
-    styledTextContainer.innerHTML = styledHTML;
+    textOverlay.innerHTML = overlayHTML;
+
+    // Update accuracy
+    const accuracy = Math.round((correctChars / totalChars) * 100) || 0;
+    accuracyDisplay.textContent = accuracy;
 }
 
 startButton.addEventListener("click", startTest);

@@ -1,7 +1,7 @@
 const sampleTexts = [
-    "The quick brown fox jumps over the lazy dog.",
-    "Practice makes perfect, so keep typing!",
-    "A journey of a thousand miles begins with a single step."
+    "The rapid advancement of technology has revolutionized every aspect of human life. From artificial intelligence to renewable energy, the innovations of today pave the way for a sustainable future. Yet, with great progress comes the responsibility to use technology wisely and ethically.",
+    "The ancient Egyptians built pyramids that have stood the test of time, their secrets buried beneath layers of history. These marvels of engineering remind us of the ingenuity and perseverance of humankind, inspiring future generations to dream and achieve the impossible.",
+    "Every day is a chance to rewrite your story. The power to change lies within you, waiting to be unleashed. Believe in yourself, set ambitious goals, and take deliberate actions toward achieving them. Success is not a destination but a journey of continuous improvement."
 ];
 
 const inputArea = document.getElementById("input-area");
@@ -17,7 +17,8 @@ let timer;
 let correctChars = 0;
 let totalChars = 0;
 
-let referenceText = "";
+let referenceText = ""; // The full reference text
+let currentLineStart = 0; // Tracks the start index of the visible portion
 
 function startTest() {
     if (isStarted) return;
@@ -33,7 +34,8 @@ function startTest() {
 
     // Display a random text
     referenceText = sampleTexts[Math.floor(Math.random() * sampleTexts.length)];
-    textOverlay.textContent = referenceText;
+    currentLineStart = 0; // Reset to the beginning
+    renderVisibleText(); // Render the first portion of the text
 
     timer = setInterval(updateTime, 1000);
 }
@@ -65,24 +67,65 @@ function checkInput() {
     correctChars = 0;
     totalChars = typedText.length;
 
-    let overlayHTML = "";
-
-    for (let i = 0; i < referenceText.length; i++) {
-        if (i < typedText.length) {
-            if (typedText[i] === referenceText[i]) {
-                overlayHTML += `<span style="color: black;">${referenceText[i]}</span>`;
-                correctChars++;
-            } else {
-                overlayHTML += `<span style="color: red;">${referenceText[i]}</span>`;
-            }
-        } else {
-            overlayHTML += `<span style="color: gray;">${referenceText[i]}</span>`;
+    // Check correctness of input
+    for (let i = currentLineStart; i < currentLineStart + typedText.length; i++) {
+        if (referenceText[i] === typedText[i - currentLineStart]) {
+            correctChars++;
         }
     }
 
-    textOverlay.innerHTML = overlayHTML;
+    // Dynamically check if the text reaches the end of the line
+    if (isEndOfLine(typedText)) {
+        currentLineStart += typedText.length; // Move the visible window forward
+        inputArea.value = ""; // Clear the input box
+    }
 
-    // Update accuracy
+    renderVisibleText(); // Update the visible text
+    updateAccuracy();
+}
+
+function renderVisibleText() {
+    // Extract the visible portion of the text
+    const visibleText = referenceText.substring(currentLineStart); // Show text starting from the current line
+    let styledHTML = "";
+
+    for (let i = 0; i < visibleText.length; i++) {
+        if (i < inputArea.value.length) {
+            // Characters already typed
+            if (inputArea.value[i] === visibleText[i]) {
+                styledHTML += `<span style="color: black;">${visibleText[i]}</span>`;
+            } else {
+                styledHTML += `<span style="color: red;">${visibleText[i]}</span>`;
+            }
+        } else {
+            // Remaining characters
+            styledHTML += `<span style="color: gray;">${visibleText[i]}</span>`;
+        }
+    }
+
+    textOverlay.innerHTML = styledHTML;
+}
+
+function isEndOfLine(typedText) {
+    // Create a temporary span to measure the width of the typed text
+    const tempSpan = document.createElement("span");
+    tempSpan.style.position = "absolute";
+    tempSpan.style.visibility = "hidden";
+    tempSpan.style.whiteSpace = "pre";
+    tempSpan.style.fontFamily = window.getComputedStyle(inputArea).fontFamily;
+    tempSpan.style.fontSize = window.getComputedStyle(inputArea).fontSize;
+    tempSpan.textContent = typedText;
+
+    document.body.appendChild(tempSpan);
+    const textWidth = tempSpan.offsetWidth; // Get the width of the rendered text
+    document.body.removeChild(tempSpan);
+
+    const inputWidth = inputArea.clientWidth - parseFloat(window.getComputedStyle(inputArea).paddingLeft) - parseFloat(window.getComputedStyle(inputArea).paddingRight);
+
+    return textWidth >= inputWidth; // Check if the text width exceeds the input box width
+}
+
+function updateAccuracy() {
     const accuracy = Math.round((correctChars / totalChars) * 100) || 0;
     accuracyDisplay.textContent = accuracy;
 }

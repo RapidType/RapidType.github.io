@@ -74,6 +74,12 @@ function startTest() {
   interval = setInterval(updateTimer, 1000);
 }
 
+function updateTextDisplay() {
+  // Always show a fixed number of words (e.g., 20)
+  const visibleWords = words.slice(currentWordIndex, currentWordIndex + 20); 
+  textDisplay.textContent = visibleWords.join(' '); 
+}
+
 function checkInput(e) {
   const typedText = textInput.value.trim(); // Get the typed input
   const currentWord = words[currentWordIndex]; // Current word to match
@@ -96,12 +102,15 @@ function checkInput(e) {
 
   // Move to the next word when space is pressed and the word is correct
   if (typedText === currentWord && textInput.value.endsWith(" ")) {
-    currentWordIndex++;
+    currentWordIndex++; // Move to the next word
     textInput.value = ""; // Clear the input field
-    if (currentWordIndex >= words.length) {
-      words = [...words, ...generateWords(20)]; // Generate more words if the current pool is exhausted
+
+    // Add one new word at the end of the array when needed
+    if (currentWordIndex + 20 >= words.length) {
+      words.push(...generateWords(1)); // Add 1 new word to ensure smooth flow
     }
-    updateTextDisplay(); // Update visible words
+
+    updateTextDisplay(); // Update visible words immediately
   }
 
   updateStats();

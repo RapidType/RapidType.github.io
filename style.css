@@ -71,21 +71,20 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  position: relative;
 }
 
 #text-display {
   font-size: 1.5em;
   color: #444;
   text-align: left;
-  width: 100%; /* Stretch full width */
+  width: 100%;
   overflow: hidden;
   white-space: nowrap;
 }
 
 #text-input {
   margin-top: 10px;
-  width: 100%; /* Stretch full width */
+  width: 100%;
   padding: 10px;
   font-size: 1.2em;
   border: 1px solid #ccc;

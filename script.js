@@ -22,7 +22,6 @@ const popupCpm = document.getElementById('popup-cpm');
 const popupAccuracy = document.getElementById('popup-accuracy');
 const restartBtn = document.getElementById('restart-btn');
 const goHomeBtn = document.getElementById('go-home-btn');
-const goHomePopupBtn = document.getElementById('go-home-popup-btn');
 
 // Show the homepage when the Go Home button is clicked
 function goHome() {
@@ -152,7 +151,6 @@ restartBtn.addEventListener('click', () => {
 
 // Add event listener to the "Go Home" buttons
 goHomeBtn.addEventListener('click', goHome);
-goHomePopupBtn.addEventListener('click', goHome);
 
 // Start the test when the page loads and the difficulty is loaded
 loadWords();

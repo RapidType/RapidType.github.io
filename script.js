@@ -34,6 +34,12 @@ function loadWords() {
     .then(response => response.json())
     .then(data => {
       words = data.words;
+
+      // Generate more words if the initial pool is smaller than required
+      if (words.length < 50) {
+        words.push(...generateWords(50 - words.length));
+      }
+
       startTest();
     })
     .catch(error => {
@@ -45,37 +51,35 @@ function loadWords() {
 function generateWords(count) {
   const wordList = [];
   for (let i = 0; i < count; i++) {
-    wordList.push(words[Math.floor(Math.random() * words.length)]);
+    const randomIndex = Math.floor(Math.random() * words.length);
+    wordList.push(words[randomIndex]);
   }
   return wordList;
 }
 
 function updateTextDisplay() {
-  const maxWidth = textDisplay.clientWidth; // Available space for words
-  let visibleWords = '';
-  let currentWidth = 0;
+  const visibleWordsCount = 50; // Number of words to show initially and during the test
+  const visibleWords = words.slice(currentWordIndex, currentWordIndex + visibleWordsCount);
 
-  for (let i = currentWordIndex; i < words.length; i++) {
-    const wordWidth = words[i].length * 15; // Approximate width per word
-    if (currentWidth + wordWidth < maxWidth) {
-      visibleWords += words[i] + ' ';
-      currentWidth += wordWidth;
-    } else {
-      break;
-    }
+  // If there are not enough words, generate additional words
+  if (visibleWords.length < visibleWordsCount) {
+    words.push(...generateWords(visibleWordsCount - visibleWords.length));
   }
-  textDisplay.textContent = visibleWords.trim();
+
+  textDisplay.textContent = visibleWords.join(' ');
 }
 
 function startTest() {
-  updateTextDisplay();
+  currentWordIndex = 0; // Start from the first word
+  updateTextDisplay(); // Display the initial 50 words
   textInput.addEventListener('input', checkInput);
   interval = setInterval(updateTimer, 1000);
 }
 
+
 function updateTextDisplay() {
-  // Always show a fixed number of words (e.g., 20)
-  const visibleWords = words.slice(currentWordIndex, currentWordIndex + 20); 
+  const visibleWordsCount = 50;
+  const visibleWords = words.slice(currentWordIndex, currentWordIndex + visibleWordsCount); 
   textDisplay.textContent = visibleWords.join(' '); 
 }
 
@@ -105,8 +109,8 @@ function checkInput(e) {
     textInput.value = ""; // Clear the input field
 
     // Add one new word at the end of the array when needed
-    if (currentWordIndex + 20 >= words.length) {
-      words.push(...generateWords(1)); // Add 1 new word to ensure smooth flow
+    if (currentWordIndex + 50 >= words.length) {
+      words.push(...generateWords(10)); // Add 10 new word to ensure smooth flow
     }
 
     updateTextDisplay(); // Update visible words immediately

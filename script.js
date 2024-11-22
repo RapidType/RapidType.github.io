@@ -33,7 +33,7 @@ function loadWords() {
   fetch(`${difficulty}.json`)
     .then(response => response.json())
     .then(data => {
-      words = data.words;
+      words = shuffleArray(data.words); // Shuffle the words to make the test more interesting
 
       // Generate more words if the initial pool is smaller than required
       if (words.length < 50) {
@@ -45,6 +45,15 @@ function loadWords() {
     .catch(error => {
       console.error("Error loading word file:", error);
     });
+}
+
+// Utility function to shuffle an array
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+  }
+  return array;
 }
 
 // Generate random words dynamically

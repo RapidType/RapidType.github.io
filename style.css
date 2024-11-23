@@ -65,6 +65,22 @@ h1 {
   display: flex;
   justify-content: space-around;
   font-size: 1.2em;
+
+  margin: 20px 0;
+  padding: 10px;
+  background: rgb(219, 209, 255);
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stats p {
+  margin: 0;
+  padding: 10px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100px;
+  text-align: center;
 }
 
 .typing-area {

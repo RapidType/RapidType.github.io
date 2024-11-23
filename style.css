@@ -1,4 +1,3 @@
-/* General Reset */
 body,
 html {
   margin: 0;
@@ -109,7 +108,6 @@ h1 {
   font-size: 20px;
 }
 
-/* Popup Card */
 .popup {
   position: fixed;
   top: 50%;
@@ -156,12 +154,11 @@ h1 {
   transition-duration: 0.3s;
   overflow: hidden;
   position: absolute;
-  bottom: -60px; /* Move the button below the input field */
-  left: 50%; /* Center the button horizontally */
-  transform: translateX(-50%); /* Offset it by 50% of its width */
+  bottom: -60px; 
+  left: 50%; 
+  transform: translateX(-50%);
 }
 
-/* The SVG icon inside the button */
 .svgIcon {
   width: 12px;
   transition-duration: 0.3s;
@@ -171,7 +168,6 @@ h1 {
   fill: white;
 }
 
-/* Hover effects for the Go Home button */
 .go-home-btn:hover {
   width: 140px;
   border-radius: 50px;
@@ -182,7 +178,6 @@ h1 {
   transform: translateY(-200%);
 }
 
-/* Tooltip text displayed below the button on hover */
 .go-home-btn::before {
   position: absolute;
   bottom: -20px;

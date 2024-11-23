@@ -44,7 +44,7 @@ body {
 
 .test-container {
   text-align: center;
-  background: #fff;
+  background: rgb(233, 227, 255);
   padding: 20px;
   width: 800px;
   height: 300px;
@@ -227,5 +227,5 @@ h1 {
 
 .input:focus {
   outline-offset: 5px;
-  background-color: #fff
+  background-color: rgb(233, 227, 255);
 }
